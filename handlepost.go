@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 )
 
@@ -11,9 +10,8 @@ type Test struct {
 }
 
 func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/", foo)
-	http.ListenAndServe(":8001", mux)
+	http.HandleFunc("/", foo)
+	http.ListenAndServe(":8001", nil)
 }
 
 func foo(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +23,9 @@ func foo(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Println(t.UserId)
+		res, err := json.Marshal(t)
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(res)
 	}
 }

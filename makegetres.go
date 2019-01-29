@@ -25,12 +25,12 @@ func foo(w http.ResponseWriter, r *http.Request) {
 	resp.Body.Close()
 
 	json.Unmarshal(bytes, &todos)
-	js, err := json.Marshal(todos)
+	res, err := json.Marshal(todos)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+	w.Write(res)
 }
